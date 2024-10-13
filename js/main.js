@@ -532,9 +532,10 @@ var jarallaxPlugin = function() {
 	});
 };
 
+
 var contactForm = function() {
-	if ($('#contactForm').length > 0 ) {
-		$( "#contactForm" ).validate( {
+	if ($('#contactForm').length > 0) {
+		$("#contactForm").validate({
 			rules: {
 				name: "required",
 				email: {
@@ -553,46 +554,124 @@ var contactForm = function() {
 			},
 			errorElement: 'span',
 			errorLabelContainer: '.form-error',
-			/* submit via ajax */
-			submitHandler: function(form) {		
+			submitHandler: function(form) {
 				var $submit = $('.submitting'),
 					waitText = 'Submitting...';
 
-				$.ajax({   	
-			      type: "POST",
-			      url: "php/send-email.php",
-			      data: $(form).serialize(),
+				$('#form-message-warning').hide();
+				$('#form-message-success').hide();
+				$('#result').html("Please wait...").show();
 
-			      beforeSend: function() { 
-			      	$submit.css('display', 'block').text(waitText);
-			      },
-			      success: function(msg) {
-	               if (msg == 'OK') {
-	               	$('#form-message-warning').hide();
-			            setTimeout(function(){
-	               		$('#contactForm').fadeOut();
-	               	}, 1000);
-			            setTimeout(function(){
-			               $('#form-message-success').fadeIn();   
-	               	}, 1400);
-		               
-		            } else {
-		               $('#form-message-warning').html(msg);
-			            $('#form-message-warning').fadeIn();
-			            $submit.css('display', 'none');
-		            }
-			      },
-			      error: function() {
-			      	$('#form-message-warning').html("Something went wrong. Please try again.");
-			         $('#form-message-warning').fadeIn();
-			         $submit.css('display', 'none');
-			      }
-		      });    		
-	  		}
-			
-		} );
+				const formData = new FormData(form);
+				const object = Object.fromEntries(formData);
+				const json = JSON.stringify(object);
+
+				fetch('https://api.web3forms.com/submit', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'Accept': 'application/json'
+					},
+					body: json
+				})
+				.then(async (response) => {
+					let jsonResponse = await response.json();
+					if (response.status === 200) {
+						$('#form-message-warning').hide();
+						setTimeout(function() {
+							$(form).fadeOut();
+						}, 1000);
+						setTimeout(function() {
+							$('#form-message-success').fadeIn(); // Show success message and animation
+						}, 1400);
+					} else {
+						$('#form-message-warning').html(jsonResponse.message);
+						$('#form-message-warning').fadeIn();
+						$submit.css('display', 'none');
+					}
+				})
+				.catch(error => {
+					console.log(error);
+					$('#form-message-warning').html("Something went wrong! Please try again.");
+					$('#form-message-warning').fadeIn();
+					$submit.css('display', 'none');
+				})
+				.finally(() => {
+					setTimeout(() => {
+						$('#result').hide();
+					}, 3000);
+				});
+			}
+		});
 	}
 };
+
+contactForm();
+
+
+
+
+// var contactForm = function() {
+// 	if ($('#contactForm').length > 0 ) {
+// 		$( "#contactForm" ).validate( {
+// 			rules: {
+// 				name: "required",
+// 				email: {
+// 					required: true,
+// 					email: true
+// 				},
+// 				message: {
+// 					required: true,
+// 					minlength: 5
+// 				}
+// 			},
+// 			messages: {
+// 				name: "Please enter your name",
+// 				email: "Please enter a valid email address",
+// 				message: "Please enter a message"
+// 			},
+// 			errorElement: 'span',
+// 			errorLabelContainer: '.form-error',
+// 			/* submit via ajax */
+// 			submitHandler: function(form) {		
+// 				var $submit = $('.submitting'),
+// 					waitText = 'Submitting...';
+
+// 				$.ajax({   	
+// 			      type: "POST",
+// 			      url: "php/send-email.php",
+// 			      data: $(form).serialize(),
+
+// 			      beforeSend: function() { 
+// 			      	$submit.css('display', 'block').text(waitText);
+// 			      },
+// 			      success: function(msg) {
+// 	               if (msg == 'OK') {
+// 	               	$('#form-message-warning').hide();
+// 			            setTimeout(function(){
+// 	               		$('#contactForm').fadeOut();
+// 	               	}, 1000);
+// 			            setTimeout(function(){
+// 			               $('#form-message-success').fadeIn();   
+// 	               	}, 1400);
+		               
+// 		            } else {
+// 		               $('#form-message-warning').html(msg);
+// 			            $('#form-message-warning').fadeIn();
+// 			            $submit.css('display', 'none');
+// 		            }
+// 			      },
+// 			      error: function() {
+// 			      	$('#form-message-warning').html("Something went wrong. Please try again.");
+// 			         $('#form-message-warning').fadeIn();
+// 			         $submit.css('display', 'none');
+// 			      }
+// 		      });    		
+// 	  		}
+			
+// 		} );
+// 	}
+// };
 
 var stickyFillPlugin = function() {
 	var elements = document.querySelectorAll('.unslate_co--sticky');
@@ -676,3 +755,39 @@ var animateReveal = function() {
 
 }
 
+const words = ["UI/UX Designer", "Front-End Developer"];
+let currentIndex = 0;
+const duration = 3000;
+
+function updateWord() {
+  const currentWord = document.querySelector('.word');
+  
+  // Hide the current word with animation
+  currentWord.classList.remove('show');
+  currentWord.classList.add('hide');
+
+  setTimeout(() => {
+    // Get the next word
+    currentIndex = (currentIndex + 1) % words.length;
+    const nextWord = words[currentIndex];
+
+    // Update the word text
+    currentWord.textContent = nextWord;
+
+    // Animate the new word in
+    currentWord.classList.remove('hide');
+    currentWord.classList.add('show');
+  }, 700); // Wait for the hide animation to finish before changing text
+}
+
+function startAnimation() {
+  setInterval(updateWord, duration);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const wordElement = document.querySelector('.word');
+  wordElement.textContent = words[currentIndex];
+  wordElement.classList.add('show');
+
+  startAnimation();
+});
