@@ -221,31 +221,33 @@ var owlCarouselPlugin = function() {
 	});
 	owlSingleSlider();
 
-	if ( $('.logo-slider').length ) {
-
+	if ($('.logo-slider').length) {
 		$('.logo-slider').owlCarousel({
 			center: false,
-	    loop: true,
-	    stagePadding: 0,
-	    margin: 0,
-	    smartSpeed: 1000,
-	    autoplay: true,
-	    autoplayHoverPause: true,
-	    dots: false,
-	    nav: false,
-	    responsive:{
-		    400:{
-		      items: 2
-		    },
-		    768:{
-		    	items: 3
-		    },
-		    1000:{
-		    	items: 5
-		    }
-	    }
-	   });
+			loop: true,
+			stagePadding: 0,
+			margin: 0,
+			smartSpeed: 14500, // Faster animation speed
+			autoplay: true,
+			autoplayHoverPause: true,
+			autoplayTimeout: 1500, // Less time before moving to the next item
+			autoplaySpeed: 2500, // Speed of the transition to the next item
+			dots: false,
+			nav: false,
+			responsive: {
+				400: {
+					items: 2
+				},
+				768: {
+					items: 3
+				},
+				1000: {
+					items: 5
+				}
+			}
+		});
 	}
+	
 
 };
 
@@ -611,67 +613,6 @@ contactForm();
 
 
 
-// var contactForm = function() {
-// 	if ($('#contactForm').length > 0 ) {
-// 		$( "#contactForm" ).validate( {
-// 			rules: {
-// 				name: "required",
-// 				email: {
-// 					required: true,
-// 					email: true
-// 				},
-// 				message: {
-// 					required: true,
-// 					minlength: 5
-// 				}
-// 			},
-// 			messages: {
-// 				name: "Please enter your name",
-// 				email: "Please enter a valid email address",
-// 				message: "Please enter a message"
-// 			},
-// 			errorElement: 'span',
-// 			errorLabelContainer: '.form-error',
-// 			/* submit via ajax */
-// 			submitHandler: function(form) {		
-// 				var $submit = $('.submitting'),
-// 					waitText = 'Submitting...';
-
-// 				$.ajax({   	
-// 			      type: "POST",
-// 			      url: "php/send-email.php",
-// 			      data: $(form).serialize(),
-
-// 			      beforeSend: function() { 
-// 			      	$submit.css('display', 'block').text(waitText);
-// 			      },
-// 			      success: function(msg) {
-// 	               if (msg == 'OK') {
-// 	               	$('#form-message-warning').hide();
-// 			            setTimeout(function(){
-// 	               		$('#contactForm').fadeOut();
-// 	               	}, 1000);
-// 			            setTimeout(function(){
-// 			               $('#form-message-success').fadeIn();   
-// 	               	}, 1400);
-		               
-// 		            } else {
-// 		               $('#form-message-warning').html(msg);
-// 			            $('#form-message-warning').fadeIn();
-// 			            $submit.css('display', 'none');
-// 		            }
-// 			      },
-// 			      error: function() {
-// 			      	$('#form-message-warning').html("Something went wrong. Please try again.");
-// 			         $('#form-message-warning').fadeIn();
-// 			         $submit.css('display', 'none');
-// 			      }
-// 		      });    		
-// 	  		}
-			
-// 		} );
-// 	}
-// };
 
 var stickyFillPlugin = function() {
 	var elements = document.querySelectorAll('.unslate_co--sticky');
