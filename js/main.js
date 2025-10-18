@@ -696,7 +696,7 @@ var animateReveal = function() {
 
 }
 
-const words = ["UI/UX Designer", "Front-End Developer"];
+const words = ["UI/UX Designer", "Software Developer"];
 let currentIndex = 0;
 const duration = 3000;
 
