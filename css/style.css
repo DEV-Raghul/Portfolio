@@ -780,6 +780,9 @@ a, a:hover {
   .cover-v1 .subheading {
     font-size: 24px;
   }
+  .cover-v1 img {
+        object-fit: cover;
+    }
 }
 
 .mouse-wrap {
