@@ -780,8 +780,11 @@ a, a:hover {
   .cover-v1 .subheading {
     font-size: 24px;
   }
-  .cover-v1 img {
-        content: url("./images/IMG_5850.png");
+}
+
+@media (min-width: 769px) {
+    #home-section {
+        background-image: url('./images/IMG_5850.png') !important;
     }
 }
 
