@@ -781,7 +781,7 @@ a, a:hover {
     font-size: 24px;
   }
   .cover-v1 img {
-        object-fit: cover;
+        content: url("./images/IMG_5850.png");
     }
 }
 
